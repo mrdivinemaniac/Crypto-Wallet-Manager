@@ -32,9 +32,7 @@ button:active {
 }
 
 #status {
-  /* avoid an excessively wide status text */
-  white-space: pre;
-  text-overflow: ellipsis;
+  word-break: break-word;
   overflow: hidden;
   width: 100%;
   font-size: 0.7em;
@@ -118,6 +116,16 @@ nav {
   transition: transform 0.2s;
 }
 
+button > .action {
+  float: none;
+  width:13px;
+  height:13px;
+}
+
 .action:hover {
   transform: scale(1.2);
+}
+
+.text-right {
+  text-align: right;
 }

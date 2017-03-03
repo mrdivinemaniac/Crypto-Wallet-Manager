@@ -1,10 +1,10 @@
 function message(statusText) {
   var elem = document.getElementById('status');
   if(statusText) {
-    elem.textContent = statusText;
+    elem.innerHTML = statusText;
     elem.style.display = "block";
   } else {
-    elem.textContent = "";
+    elem.innerHTML = "";
     elem.style.display = "none";
   }
 }
@@ -48,20 +48,12 @@ var UI = function(modes, defaultMode) {
   var currentModeName = null;
   var currentModeData = null;
 
-  var showElem = function(id) {
-    document.getElementById(id).style.display = "";
-  };
-
-  var hideElem = function(id) {
-    document.getElementById(id).style.display = "none";
-  };
-
   this.changeMode = function(modeName, modeData) {
     if(!modes.hasOwnProperty(modeName)) return;
     //Hide previous mode
     if(currentMode) {
       if(currentMode.beforeHide) mode.beforeHide.call(this,currentModeData);
-      hideElem(currentMode.elem);
+      UI.hideElem(currentMode.elem);
     }
 
     if(modeData!=null || modeData!=undefined) currentModeData = modeData;
@@ -70,7 +62,7 @@ var UI = function(modes, defaultMode) {
     //Display current mode's elem
     var mode = modes[modeName];
     if(mode.beforeShow) mode.beforeShow.call(this,modeData);
-    showElem(mode.elem);
+    UI.showElem(mode.elem);
     currentMode = mode;
     currentModeName = modeName;
   };
@@ -85,13 +77,21 @@ var UI = function(modes, defaultMode) {
 
   for(var mode in modes) {
     if(modes.hasOwnProperty(mode) && modes[mode].elem) {
-        hideElem(modes[mode].elem);
+        UI.hideElem(modes[mode].elem);
     }
   };
 
   if(defaultMode) {
     this.changeMode(defaultMode);
   }
+};
+
+UI.showElem = function(id) {
+  document.getElementById(id).style.display = "";
+};
+
+UI.hideElem = function(id) {
+  document.getElementById(id).style.display = "none";
 };
 
 var WalletList = function(key, createdCallback) {
@@ -229,6 +229,8 @@ var WalletList = function(key, createdCallback) {
       for(var i=0; i < wallets.length; ++i) {
         container.appendChild(walletHTML(wallets[i],i));
       }
+    } else {
+      message("You currently have no wallets added.<br/>Please click on the add button to add a wallet.");
     }
   }
 
@@ -243,7 +245,7 @@ var WalletList = function(key, createdCallback) {
   };
 
   this.deleteAtIndex = function(index) {
-    allData = allData.splice(index,1);
+    allData.splice(index,1);
   };
 
   this.editAtIndex = function(index, wallet) {
@@ -314,6 +316,18 @@ document.addEventListener('DOMContentLoaded', function() {
     ui.changeMode("wallet");
   });
 
+  document.getElementById("delete-button").addEventListener("click", function(e) {
+    var mode = ui.getCurrentMode();
+    if(mode.name != "edit") return;
+    var answer = confirm("Are you sure that you want to delete this wallet?");
+    if(answer) {
+      myWallets.deleteAtIndex(mode.data);
+      myWallets.save(function() {
+        ui.changeMode("wallet");
+      });
+    }
+  });
+
   function fillSelect(select, values, selected, _default) {
     function getOption(text, value) {
       var option = document.createElement('option');
@@ -342,26 +356,13 @@ document.addEventListener('DOMContentLoaded', function() {
   var coinSelect = document.forms[0].elements["coin"];
   var providerSelect = document.forms[0].elements["provider"];
 
-  fillSelect(
-    coinSelect, 
-    App.Coins,
-    "Bitcoin"
-  );
-
-  fillSelect(
-    providerSelect, 
-    App.Providers, 
-    false,
-    "Please Select Your Wallet Provider"
-  );
-
   coinSelect.addEventListener("change", function() {
     var select = coinSelect.value;
     if(!select) return;
     if(!App.Coins[select]) {
       fillSelect(
         providerSelect,
-        App.providers,
+        App.Providers,
         "other",
         "Please Select Your Wallet Provider")
     } else {
@@ -387,21 +388,40 @@ document.addEventListener('DOMContentLoaded', function() {
     ui.changeMode("add");
   };
 
+  fillSelect(coinSelect, App.Coins, "Bitcoin");
+
   ui = new UI({
     wallet: {
       beforeShow: function() {
+        message("");
         myWallets.render("#wallet-list"); 
         title("MY WALLETS");
-        message("");
       },
       elem: "wallet-list"
     },
     add: {
-      beforeShow: function() {title("ADD WALLET"); message("");},
+      beforeShow: function() {
+        UI.hideElem("delete-button");
+        title("ADD WALLET"); 
+        message("");
+        //Empty all the form fields
+        var elems = document.forms[0].elements;
+        elems["name"].value = "";
+        elems["address"].value = "";
+        elems["coin"].value = "Bitcoin";
+
+        fillSelect(
+          providerSelect, 
+          App.Providers, 
+          false,
+          "Please Select Your Wallet Provider"
+        );
+      },
       elem: "wallet-form"
     },
     edit: {
       beforeShow: function(item) {
+        UI.showElem("delete-button");
         message("");
         title("EDIT WALLET");
         var wallet = myWallets.get(item);
@@ -409,14 +429,15 @@ document.addEventListener('DOMContentLoaded', function() {
         elems["name"].value = wallet.name;
         elems["address"].value = wallet.address;
         elems["coin"].value = wallet.coin;
-        elems["provider"].value = wallet.provider;
         //Update provider select
         fillSelect(
           providerSelect,
-          App.Coins[wallet.coin].providers,
+          (App.Coins[wallet.coin])? App.Coins[wallet.coin].providers:App.Providers,
           false,
           "Please Select Your Wallet Provider"
         );
+
+        elems["provider"].value = wallet.provider;
       },
       elem: "wallet-form"
     },
