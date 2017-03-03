@@ -1,0 +1,123 @@
+body {
+  font-family: "Segoe UI", "Lucida Grande", Tahoma, sans-serif;
+  font-size: 100%;
+  min-width: 400px;
+}
+
+button {
+  border: 1px solid #CCCCCC;
+  border-radius: 5px;
+  padding: 3px 8px;
+  background: none;
+  cursor: pointer;
+  margin-top: 5px;
+}
+
+button:active {
+  background: RGBa(0,0,0,0.1);
+}
+
+.wallet-form label {
+  font-size: 0.8em;
+}
+
+.wallet-form input, .wallet-form select {
+  width: 100%;
+  border: 0;
+  padding: 5px;
+  margin-bottom: 5px;
+  border: 1px solid #CCCCCC;
+  background: none;
+  box-sizing: border-box;
+}
+
+#status {
+  /* avoid an excessively wide status text */
+  white-space: pre;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  width: 100%;
+  font-size: 0.7em;
+  background: #99FFCC;
+  padding: 5px; 
+  box-sizing: border-box;
+  display: none;
+  margin: 10px 0;
+}
+
+nav {
+  margin: 15px 0;
+}
+
+#nav-menu {
+  float: right;
+}
+
+#nav-title {
+  float: left;
+  margin: 0;
+}
+
+.menu {
+  margin: 0;
+}
+
+.menu > li {
+  display: inline-block;
+  font-size: 0.8em;
+  margin-left: 10px;
+  padding: 2px;
+  border-bottom: 1px solid #77AAFF;
+  cursor: pointer;
+}
+
+.menu > li > a {
+  text-decoration: none;
+  color: #000000;
+}
+
+#main-logo {
+  width: 16px;
+  height: 16px;
+}
+
+#wallet-list {
+  min-width: 400px;
+  width: 400px;
+}
+
+.wallet {
+  background: #77AAFF;
+  padding: 10px;
+  margin-bottom: 5px;
+}
+
+.wallet-name {
+  font-size: 1.1em;
+  color: #FFFFFF;
+}
+
+.wallet-address {
+  font-size: 0.9em;
+  color: #EFEFEF;
+  word-wrap: break-word;
+}
+
+.wallet-info {
+  font-size: 0.7em;
+  color: #DEFE99;
+}
+
+.action {
+  width: 16px;
+  height: 16px;
+  background: RGBa(255,255,255,0.2);
+  border-radius: 50%;
+  float: right;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.action:hover {
+  transform: scale(1.2);
+}

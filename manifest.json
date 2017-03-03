@@ -1,0 +1,18 @@
+{
+  "manifest_version": 2,
+
+  "name": "Crypto Wallet Manager",
+  "description": "This extension helps you manage all of the bitcoin wallets that you have. It provides a quick copy button to copy your wallet address and also a button to quickly jump to your wallet login page",
+  "version": "1.0",
+
+  "browser_action": {
+    "default_icon": "icon.png",
+    "default_popup": "my-wallets.html",
+    "default_title": "Bitcoin Wallet Manager"
+  },
+  "permissions": [
+    "storage",
+    "activeTab",
+    "https://ajax.googleapis.com/"
+  ]
+}
