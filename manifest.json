@@ -2,7 +2,7 @@
   "manifest_version": 2,
 
   "name": "Crypto Wallet Manager",
-  "description": "This extension helps you manage all of the bitcoin wallets that you have. It provides a quick copy button to copy your wallet address and also a button to quickly jump to your wallet login page",
+  "description": "Owning multiple cryptocurrency wallets is a hassle because of the multiple wallet addresses. This extension provides an easy way to store wallet addresses for multiple crypto currencies along with a qr code generator and a feature to copy the addresses with a single click. Managing multiple wallets has not been any easier.",
   "version": "1.0",
 
   "browser_action": {

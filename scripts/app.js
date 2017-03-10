@@ -140,12 +140,11 @@ document.addEventListener('DOMContentLoaded', function() {
     ui.changeMode("wallet");
   };
   navItems[1].onclick = function() {
-    ui.changeMode("contacts");
-  };
-  navItems[2].onclick = function() {
     ui.changeMode("add");
   };
-
+  navItems[2].onclick = function() {
+    ui.changeMode("about");
+  };
   fillSelect(coinSelect, App.Coins, "Bitcoin");
 
   ui = new UI({
@@ -199,9 +198,11 @@ document.addEventListener('DOMContentLoaded', function() {
       },
       elem: "wallet-form"
     },
-    contacts: {
-      beforeShow: function() {contacts.render("#wallet-list"); title("FRIENDS");},
-      elem: "wallet-list"
+    about: {
+      beforeShow: function() {
+        title("About");
+      },
+      elem: "about"
     }
   },"wallet");
   

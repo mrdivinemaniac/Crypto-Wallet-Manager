@@ -106,6 +106,15 @@ nav {
   color: #DEFE99;
 }
 
+.wallet-info a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.wallet-qr {
+  padding: 5px 0;
+}
+
 .action {
   width: 16px;
   height: 16px;
@@ -114,6 +123,10 @@ nav {
   float: right;
   cursor: pointer;
   transition: transform 0.2s;
+}
+
+.action.no-float {
+  float: none;
 }
 
 button > .action {
@@ -128,4 +141,32 @@ button > .action {
 
 .text-right {
   text-align: right;
+}
+
+#about {
+  font-size: 0.8em;
+}
+
+#about-instructions {
+  list-style: none;
+  padding-left: 0px;
+  margin: 0;
+}
+
+.about-action {
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  margin-right: 5px;
+}
+
+dt {
+  display: inline-block;
+  font-weight: bold;
+  font-style: italic;
+  margin-top: 10px;
+}
+
+dd {
+  margin-left: 0;
 }

@@ -13,14 +13,31 @@ var WalletList = function(key, createdCallback) {
   //Renders after load if set to a selector
   var renderAfterLoad = false;
   var loading = false; //Loading flag
+  var lastOpenQR = null;
 
-  function openWallet(provider) {
+  function getWalletURL(provider) {
     var info = App.Providers[provider];
-    if(!info) return;
-    chrome.tabs.create({
-      url:info["url"],
-      active: true
-    });
+    if(!info || !info['url']) return;
+    else return info["url"];
+  }
+
+  function toggleQR(el, wallet) {
+    //Close last opened QR
+    if(lastOpenQR) toggleQR(lastOpenQR);
+    if(el.style.display=="none") {
+      el.style.display = "";
+      if(el.innerHTML == "") {
+        new QRCode(el, {
+          text: wallet.address,
+          width: 128,
+          height: 128,
+          colorDark : "#000000",
+          colorLight : "#ffffff",
+          correctLevel : QRCode.CorrectLevel.H
+        });
+      }
+      lastOpenQR = el;
+    } else el.style.display = "none";
   }
 
   function copyToClipboard(text) {
@@ -84,23 +101,38 @@ var WalletList = function(key, createdCallback) {
 
     var info = document.createElement("div");
     info.setAttribute("class", "wallet-info");
-    if(wallet.coin) info.innerText = wallet.coin;
-    else info.innerText = "";
-    if(wallet.provider) info.innerText += "@"+wallet.provider;
+    if(wallet.coin) info.innerHTML = wallet.coin;
+    else info.innerHTML = "";
+    if(wallet.provider) {
+      var walletURL = getWalletURL(wallet.provider);
+      if(walletURL)
+        info.innerHTML += "@<a href='" + walletURL + "' target='_blank'>" + wallet.provider + "</a>";
+      else 
+        info.innerHTML += "@" + wallet.provider;
+    }
 
-    var walletLink = document.createElement("img");
-    walletLink.setAttribute("src", "icons/link.png");
-    walletLink.setAttribute("alt", "Open Wallet");
-    walletLink.setAttribute("title", "Open Wallet");
-    walletLink.setAttribute("class", "action");
-    walletLink.addEventListener("click", function() {openWallet(wallet.provider)});
+    var qrLink = document.createElement("img");
+    qrLink.setAttribute("src", "icons/qrcode.png");
+    qrLink.setAttribute("alt", "Toggle QR");
+    qrLink.setAttribute("title", "Toggle QR");
+    qrLink.setAttribute("class", "action");
+
+    var qrDiv = document.createElement("div");
+    qrDiv.setAttribute("class", "wallet-qr");
+    qrDiv.style.display = "none";
+
+    qrLink.addEventListener("click", function() {
+      toggleQR(qrDiv,wallet);
+    });
 
     name.appendChild(editLink);
     address.appendChild(addressLink);
-    info.appendChild(walletLink);
+    //if(App.Providers[wallet.provider] && App.Providers[wallet.provider].url) info.appendChild(walletLink);
+    info.appendChild(qrLink);
     container.appendChild(name);
     container.appendChild(address);
     container.appendChild(info);
+    container.appendChild(qrDiv);
 
     return container;
   }
