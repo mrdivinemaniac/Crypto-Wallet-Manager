@@ -2,7 +2,7 @@
   "manifest_version": 2,
 
   "name": "Crypto Wallet Manager",
-  "description": "Owning multiple cryptocurrency wallets is a hassle because of the multiple wallet addresses. This extension provides an easy way to store wallet addresses for multiple crypto currencies along with a qr code generator and a feature to copy the addresses with a single click. Managing multiple wallets has not been any easier.",
+  "description": "Owning multiple cryptocurrency wallets is a hassle because of the multiple wallet addresses. This extension provides an easy way to store wallet addresses for multiple crypto currencies along with a qr code generator and a feature to copy the addresses with a single click. Managing multiple wallets has never been this easy.",
   "version": "1.0",
 
   "browser_action": {
